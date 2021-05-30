@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: GPL-2.0
+ /*
+ * Copyright (C) 2019 Intel Corporation <www.intel.com>
+ *
+ */
+
+/dts-v1/;
+
+/ {
+	description = "FIT image with boot binaries";
+	#address-cells = <1>;
+
+	images {
+		standalone {
+			description = "U-Boot (32-bit)";
+			data = /incbin/("u-boot-dtb.bin");
+			type = "standalone";
+			os = "u-boot";
+			arch = "arm";
+			compression = "none";
+			load = <0x01000040>;
+			entry = <0x01000040>;
+			hash-1{
+				algo ="sha256";
+			};
+		};
+	};
+
+	configurations {
+		default = "conf";
+		conf {
+			description = "Intel Arria10 SoCDK";
+			standalone = "standalone";
+			signature {
+				algo ="sha256,rsa2048";
+				key-name-hint ="first_key";
+				sign-images="standalone";
+			};
+		};
+	};
+};
